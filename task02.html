@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Animated Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    }
+    .calculator {
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 300px;
+      animation: fadeIn 1s ease forwards;
+      opacity: 0;
+    }
+
+@keyframes fadeIn {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+    input {
+      width: 100%;
+      font-size: 24px;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+      transition: box-shadow 0.3s ease;
+    }
+
+    input.glow {
+      box-shadow: 0 0 10px #4A90E2;
+    }
+
+    button {
+      width: 60px;
+      height: 40px;
+      margin: 5px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4A90E2;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.1s ease, background-color 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    button:hover {
+      background-color: #357ABD;
+    }
+
+    .wide {
+      width: 125px;
+      background-color: #E94E77;
+    }
+
+    .wide:hover {
+      background-color: #D13C63;
+    }
+  </style>
+</head>
+<!--HTML STRUCTURE-->
+<body>
+  <div class="calculator">
+    <input type="text" id="display" disabled />
+    <br />
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button onclick="append('/')">/</button>
+    <br />
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button onclick="append('*')">*</button>
+    <br />
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button onclick="append('-')">-</button>
+    <br />
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button onclick="calculate()">=</button>
+    <button onclick="append('+')">+</button>
+    <br />
+    <button onclick="clearDisplay()" class="wide">Clear</button>
+    <button onclick="deleteLast()" class="wide">Delete</button>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+
+    function append(value) {
+      display.classList.remove('glow');
+      display.value += value;
+    }
+
+    function calculate() {
+      try {
+        display.value = eval(display.value);
+        display.classList.add('glow');
+        setTimeout(() => display.classList.remove('glow'), 1000);
+      } catch {
+        display.value = 'Error';
+      }
+    }
+
+    function clearDisplay() {
+      display.classList.remove('glow');
+      display.value = '';
+    }
+
+    function deleteLast() {
+      display.classList.remove('glow');
+      display.value = display.value.slice(0, -1);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key.match(/[0-9+\-*/.=]/)) {
+        if (e.key === '=') calculate();
+        else append(e.key);
+      } else if (e.key === 'Enter') {
+        calculate();
+      } else if (e.key === 'Backspace') {
+        deleteLast();
+      } else if (e.key === 'Escape') {
+        clearDisplay();
+      }
+    });
+  </script>
+</body>
+</html>
